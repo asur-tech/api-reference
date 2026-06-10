@@ -4,9 +4,9 @@ using HotChocolate;
 using Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
-using Web.GraphQL;
 using Web.GraphQL.Extensions;
 using Web.GraphQL.Infrastructure;
+using Web.GraphQL.Payrolls;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +25,11 @@ builder.Services.AddProblemDetails();
 
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>()
-    .AddMutationType<Mutation>()
+    // Bare root Query/Mutation types — each feature slice contributes its fields via [ExtendObjectType].
+    .AddQueryType()
+    .AddMutationType()
+    .AddTypeExtension<PayrollQueries>()
+    .AddTypeExtension<PayrollMutations>()
     // Failed Results already carry a domain error code (see ResultGraphQL); anything else is an
     // unexpected exception, which we surface as a stable, non-leaking error.
     .AddErrorFilter(error => string.IsNullOrEmpty(error.Code)

@@ -1,12 +1,14 @@
 using Application.Payrolls.Create;
+using HotChocolate.Types;
 using MediatR;
-using Web.GraphQL.Types;
 
-namespace Web.GraphQL;
+namespace Web.GraphQL.Payrolls;
 
-// GraphQL root mutation. Delegates to the existing CreatePayrollCommand (validation runs in
-// the MediatR pipeline) and returns the new id, or surfaces the failed Result as a GraphQL error.
-public sealed class Mutation
+// ── Vertical slice: the Payroll feature's MUTATION fields ───────────────────────────────────
+// [ExtendObjectType("Mutation")] grafts these fields onto the root Mutation type. Same idea as
+// PayrollQueries — the feature owns its write operations alongside its reads and DTOs.
+[ExtendObjectType("Mutation")]
+public sealed class PayrollMutations
 {
     public async Task<Guid> CreatePayroll(
         CreatePayrollInput input,

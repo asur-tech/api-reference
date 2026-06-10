@@ -1,4 +1,4 @@
-namespace Web.GraphQL.Types;
+namespace Web.GraphQL.Payrolls;
 
 // Input for the createPayroll mutation. Hot Chocolate exposes this as "CreatePayrollInput".
 public sealed record CreatePayrollInput(

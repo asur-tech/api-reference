@@ -1,14 +1,19 @@
 using Application.Payrolls.GetByEmail;
 using Application.Payrolls.GetById;
+using HotChocolate.Types;
 using MediatR;
-using Web.GraphQL.Types;
 
-namespace Web.GraphQL;
+namespace Web.GraphQL.Payrolls;
 
-// GraphQL root query. Each resolver is thin: it delegates to the existing MediatR query
-// (which keeps validation, logging and Redis caching intact) and maps the Result onto the
-// GraphQL type — the same job the REST GET endpoints used to do.
-public sealed class Query
+// ── Vertical slice: the Payroll feature's QUERY fields ──────────────────────────────────────
+// [ExtendObjectType("Query")] grafts these fields onto the root Query type (created bare in Program.cs
+// via AddQueryType()). So instead of one giant Query class, every feature owns its query fields in its
+// own folder — the presentation-layer mirror of the Application/Payrolls vertical slices.
+//
+// ResultGraphQL (in the parent Web.GraphQL namespace) is reachable here without a using, because name
+// lookup walks outward from Web.GraphQL.Payrolls to Web.GraphQL.
+[ExtendObjectType("Query")]
+public sealed class PayrollQueries
 {
     public async Task<PayrollDto> GetPayrollById(
         Guid id,
