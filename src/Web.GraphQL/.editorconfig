@@ -1,0 +1,12 @@
+# Inherits from the repository-root .editorconfig; only overrides specific to this project.
+
+[*.cs]
+# Hot Chocolate resolver methods (Query/Mutation) are invoked by the runtime via reflection.
+# They are intentionally instance methods even when they don't touch instance state, so Sonar's
+# "make this method static" rule is a false positive here.
+dotnet_diagnostic.S2325.severity = none
+
+# Works around a crash in the ASP.NET Core RouteHandlerAnalyzer ("Failed to resolve well-known
+# type 'Microsoft.AspNetCore.Builder.EndpointRouteBuilderExtensions'"). It surfaces as AD0001 in
+# this minimal host (no minimal-API MapGet/Post for the analyzer to bind to). Not a code defect.
+dotnet_diagnostic.AD0001.severity = none
